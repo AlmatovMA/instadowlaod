@@ -5,12 +5,40 @@ def instadown(link):
 
     querystring = {"url":link}
 
-    headers = {
-        "X-RapidAPI-Key": "2cd5bfb8c7mshd9728daca531f13p118fdfjsn77c84124efd2",
-        "X-RapidAPI-Host": "instagram-downloader-download-instagram-videos-stories.p.rapidapi.com"
-    }
+    headers= {
+    'X-RapidAPI-Key': '7b9b9944bdmsh4cd21ef6613b941p1781bbjsn1b56afbb9fd5',
+    'X-RapidAPI-Host': 'instagram-downloader-download-instagram-videos-stories.p.rapidapi.com'
+  }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
     rest = json.loads(response.text)
-    print(rest)
-instadown("https://www.instagram.com/p/Co6DhHvjkjh/?igshid=YmMyMTA2M2Y=")
+    if 'error' in rest:
+        return "ссылка не опознан"
+    else:
+        dict = {}
+        if rest['Type'] == 'Post-Video':
+            dict['type'] = 'video'
+            dict['media']=rest['media']
+            return dict
+        elif rest['Type'] == 'Carousel':
+            dict['type'] = 'caarousel'
+            dict['media']=rest['media']
+            return dict
+        elif rest['Type'] == 'Post-Image':
+            dict['type'] = 'image'
+            dict['media']=rest['media']
+            return dict
+        elif rest['Type'] == 'Story-Video':
+            dict['type'] = 'story-video'
+            dict['media']=rest['media']
+            return dict
+        elif rest['Type'] == 'Story-Image':
+            dict['type'] = 'story-image'
+            dict['media']=rest['media']
+            return dict
+        else:
+            return "формат не опознан"
+            
+   
+    print(dict)
+instadown("https://instagram.com/stories/mr.saidofff/3044355388045539789?utm_source=ig_story_item_share&igshid=YmMyMTA2M2Y=")
